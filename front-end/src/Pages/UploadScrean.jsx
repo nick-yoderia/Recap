@@ -1,5 +1,5 @@
 import FileUploader from "../components/FileUploader"
-import AnimatedButton from "../components/button"
+import AnimatedButton from "../components/AnimatedButton"
 
 export default function UploadScreen () {
 

@@ -7,7 +7,6 @@ export default function RecapHeader() {
           <h1 className="text-left text-3xl">
             <Link to='/'>recap</Link>
           </h1>
-          {/* headers on left*/}
           <div className = "text-right space-x-15 flex justify_end ">
             <div onClick={() => alert("TODO: Dark/Light mode")} className = "hover:opacity-60" >  settings </div>
             <div className = "hover:opacity-60" > 

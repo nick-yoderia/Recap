@@ -1,6 +1,6 @@
 
 export default function About() {
     return(
-        <div>About Screan add later or delete</div>
+        <div>About Screen add later or delete</div>
     )
 }

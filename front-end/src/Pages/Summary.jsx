@@ -1,6 +1,6 @@
 
 export default function Summary() {
     return(
-        <div>Summary Screan</div>
+        <div>Summary Screen</div>
     )
 }
