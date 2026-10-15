@@ -1,10 +1,10 @@
 # Installation 
 
-Make sure you have npm and Node.js installed: 
-https://nodejs.org/en/download
+Make sure you have [**Node.js**](https://nodejs.org/en/download) and npm installed 
 
-    npm -v
     node -v 
+    npm -v 
+
 Enter front-end directory
 
     cd front-end
@@ -13,6 +13,6 @@ Install dependencies
 
     npm install 
 
-Start the server 
+Run the server
 
-    npm run dev 
+    npm run dev
