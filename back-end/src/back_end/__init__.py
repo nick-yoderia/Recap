@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from back-end!")
+from back_end.cli import run as main

@@ -7,7 +7,10 @@ authors = [
     { name = "Nick Yoder", email = "nzy5051@gmail.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "av<19",
+    "faster-whisper>=1.2.1",
+]
 
 [project.scripts]
 back-end = "back_end:main"
