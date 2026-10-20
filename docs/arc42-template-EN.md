@@ -183,7 +183,34 @@ Important Interfaces
 
 ## Infrastructure Level 1
 
-***\<Overview Diagram\>***
+```mermaid
+flowchart TD
+    user["User's Browser<br>(runs React app)"]
+
+    subgraph host["Host Machine"]
+        subgraph container["Recap Container (Docker)"]
+            api["API app (FastAPI)<br>API + serves React build"]
+
+            subgraph transcribe["Transcribe Job (CLI)"]
+                ffmpeg["FFmpeg"]
+                whisper["Faster-Whisper"]
+            end
+
+            summarize["Summarize Job (CLI)"]
+        end
+        volume[("Persistent Volume<br>data/recap.db<br>data/media/")]
+    end
+
+    llm["External LLM API"]
+
+    user <-->|HTTPS| api
+    api <-->|runs CLI| transcribe
+    transcribe -->|writes transcript| volume
+    api <-->|runs CLI| summarize
+    summarize -->|writes summary| volume
+    summarize <-->|HTTPS| llm
+    api <-->|SQL,<br>File System| volume
+```
 
 Motivation  
 *\<explanation in text form\>*
