@@ -93,6 +93,8 @@ Once processed, transcriptions and any other generated data will be stored using
 
 ***\<Overview Diagram\>***
 
+![Level 1](assets/luke/level-1-diagram.svg)
+
 Motivation  
 *\<text explanation\>*
 
@@ -132,6 +134,8 @@ Important Interfaces
 
 ## Level 2
 
+![Level 2](assets/luke/level-2-diagram.svg)
+
 ### White Box *\<building block 1\>*
 
 *\<white box template\>*
@@ -147,6 +151,8 @@ Important Interfaces
 *\<white box template\>*
 
 ## Level 3
+
+![Level 3](assets/luke/level-3-diagram.svg)
 
 ### White Box \<\_building block x.1\_\>
 
