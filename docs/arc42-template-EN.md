@@ -205,9 +205,9 @@ flowchart TB
   end
     user@{ label: "User's Browser<br>(runs React app)" } <-- HTTPS --> api
     api <-- runs CLI --> convert & transcribe & summarize
-    convert <-- SQL --> volume
-    transcribe <-- "<span style=padding-left:>SQL</span>" --> volume
-    summarize <-- "<span style=padding-left: 8px; padding-right: 8px; text-align: center; justify-content: center;>SQL</span>" --> volume
+    convert <-- SQL,<br>File System --> volume
+    transcribe <-- SQL,<br>File System --> volume
+    summarize <-- SQL --> volume
     summarize <-- HTTPS --> llm["External LLM API"]
     api <-- SQL,<br>File System --> volume
 
