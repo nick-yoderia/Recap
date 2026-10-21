@@ -192,44 +192,41 @@ Important Interfaces
 ## Infrastructure Level 1
 
 ```mermaid
-flowchart TD
-    user["User's Browser<br>(runs React app)"]
-
-    subgraph host["Host Machine"]
-        subgraph container["Recap Container (Docker)"]
-            api["API app (FastAPI)<br>API + serves React build"]
-
-            subgraph transcribe["Transcribe Job (CLI)"]
-                ffmpeg["FFmpeg"]
-                whisper["Faster-Whisper"]
-            end
-
-            summarize["Summarize Job (CLI)"]
-        end
+flowchart TB
+ subgraph container["Recap Container (Docker)"]
+        api["API app (FastAPI)<br>API + serves React build"]
+        convert["Convert Job (CLI)<br>FFmpeg"]
+        transcribe["Transcribe Job (CLI)<br>Faster-Whisper"]
+        summarize["Summarize Job (CLI)"]
+  end
+ subgraph host["Host Machine"]
+        container
         volume[("Persistent Volume<br>data/recap.db<br>data/media/")]
-    end
+  end
+    user@{ label: "User's Browser<br>(runs React app)" } <-- HTTPS --> api
+    api <-- runs CLI --> convert & transcribe & summarize
+    convert <-- SQL --> volume
+    transcribe <-- "<span style=padding-left:>SQL</span>" --> volume
+    summarize <-- "<span style=padding-left: 8px; padding-right: 8px; text-align: center; justify-content: center;>SQL</span>" --> volume
+    summarize <-- HTTPS --> llm["External LLM API"]
+    api <-- SQL,<br>File System --> volume
 
-    llm["External LLM API"]
-
-    user <-->|HTTPS| api
-    api <-->|runs CLI| transcribe
-    transcribe -->|writes transcript| volume
-    api <-->|runs CLI| summarize
-    summarize -->|writes summary| volume
-    summarize <-->|HTTPS| llm
-    api <-->|SQL,<br>File System| volume
+    user@{ shape: rect}
 ```
 
-Motivation  
-*\<explanation in text form\>*
+### **Motivation**  
+We are targeting a complete self-hosted web application. The main priorities are simplicity, portability, and functionality. We are not expecting high traffic which means we can defer the use of container clusters, complex event streams and message/job queues. Furthermore, to maintain simplicity we are utilizing a single Docker container to contain the entirety of the web app host. This has the secondary benefit of giving us portability to run on varying hosts and operating systems. With this infrastructure layout we also maintain the modularity required for a multi-person project. Utilizing a central app for the API and subprocesses for the modular components of Recap gives clear compartmentalization of the application.
 
-Quality and/or Performance Features  
-*\<explanation in text form\>*
+### **Quality and/or Performance Features**
+- **Responsiveness**: The API and web server relay jobs to the parallel CLI subprocesses. This keeps them free to handle incoming traffic without having to wait for running jobs to complete before serving other users.
+- **Persistence and Reliability**: The database and data volume persist across container restarts, rebuilds, and crashes. The downside of running a single Docker container on a single host machine is a single point of failure. If the host goes down, or gets so much traffic that CPU load becomes too high, the application will respond slowly or not at all.
+- **Scalability**: This model does not provide scalability on its own. It cannot scale to high traffic that exhausts CPU or GPU load. However, its infrastructure layout could be converted to take advantage of event streams and cluster configurations later with some refactoring.
+- **Privacy**: The transcript is the only user data that leaves the host machine; it is sent to the external LLM for the summarize function. Otherwise, user data stays on the host machine. Recap keeps a copy of the user's audio file after FFmpeg conversion, along with the resulting transcription and summary.
 
-Mapping of Building Blocks to Infrastructure  
-*\<description of the mapping\>*
+### **Mapping of Building Blocks to Infrastructure**
+TODO: Waiting on Building Block View
 
-# Quality Requirements
+# Quality Requirements (Nick)
 
 ## Quality Requirements Overview
 
