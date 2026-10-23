@@ -17,9 +17,14 @@ contributors. See <https://arc42.org>.
 
 # Introduction and Goals (Keyan)
 
-Recap is a project focused on improving meeting effectiveness and efficiency. Its primary goal is to process audio files and extract useful, concise, and accurate information. 
+Recap is a project focused on improving meeting effectiveness and efficiency through AI-powered summarization. It addresses the issues of meetings often going undocumented, manual note taking distracting participants, and important decisions and responsibilities being overlooked. Recap accomplishes this by extracting and organizing the following information from meetings: 
 
-Once an audio file is uploaded, the system processes the recording, generates a summary, and displays it to the user.  Users can export summaries as PDF files or markdowns, to retain and refer back to meeting information over time. Users do not need to create an account or sign in, database entries are associated with the user’s browser through long-lived cookies. 
+- Short overall summary 
+- Key decisions 
+- Action items  + owners 
+- Topic outline with timestamps 
+
+Once an audio file is uploaded, the system processes the recording, generates a summary, and displays it to the user. Users can export summaries as PDF files or markdowns, to retain and refer back to meeting information over time. Users do not need to create an account or sign in, database entries are associated with the user’s browser through long-lived cookies. 
 
 The system should process audio files reliably and generate accurate and understandable summaries within a reasonable amount of time. Errors should not cause the application to fail, they should be handled gracefully and communicated clearly to the user. The user interface should also be intuitive and provide a seamless experience for users. 
 
