@@ -91,82 +91,65 @@ Once processed, transcriptions and any other generated data will be stored using
 
 # Building Block View (Luke)
 
-## Whitebox Overall System
+## Scope and Context
 
-***\<Overview Diagram\>***
+![Scope and Context](assets/luke/scope-and-context-diagram.svg)
 
-![Level 1](assets/luke/level-1-diagram.svg)
+React provides users with a single interface to upload meeting recordings from their local filesystem and view structured summaries of the audio content. The system interfaces with the OpenAI API to generate the summaries from meeting transcripts. 
 
-Motivation  
-*\<text explanation\>*
+### Interfaces
+| Interface | Direction | Description |
+|---|---|---|
+| User Interface | User ↔ Recap | Uploads recordings and displays summaries |
+| OpenAI API | Recap ↔ OpenAI | Sends transcripts and receives structured summaries |
 
-Contained Building Blocks  
-*\<Description of contained building block (black boxes)\>*
+## Level 1
 
-Important Interfaces  
-*\<Description of important interfaces\>*
+![Level 1 Building Blocks](assets/luke/level-1-building-block-diagram.svg)
 
-### \<Name black box 1\>
 
-*\<Purpose/Responsibility\>*
+### Contained blackboxes
+| Building Block | Description |
+|---|---|
+| Front End | Provide the interface that users will interact with when uploading meeting recordings or viewing structured meeting summaries. |
+| Back End| Process recordings, generate transcripts with Whisper, interact with OpenAI API, and manage data transfer between front end and database. |
+| Database | Record metadata about meeting recordings, transcripts, and summaries|
+---
+### Interfaces
+| Interface | Direction | Description |
+|---|---|---|
+| User Interface | User ↔ Front End | Uploads recordings and displays summaries |
+| Backend API | Front End ↔ Backend | Send raw audio for processing and return structured summary and processing status | 
+| Persistence API | Backend ↔ Database | Manage communication from backend to database |
+| OpenAI API | Backend ↔ OpenAI | Sends transcripts and receives structured summaries |
+---
 
-*\<Interface(s)\>*
-
-*\<(Optional) Quality/Performance Characteristics\>*
-
-*\<(Optional) Directory/File Location\>*
-
-*\<(Optional) Fulfilled Requirements\>*
-
-*\<(optional) Open Issues/Problems/Risks\>*
-
-### \<Name black box 2\>
-
-*\<black box template\>*
-
-### \<Name black box n\>
-
-*\<black box template\>*
-
-### \<Name interface 1\>
-
-…​
-
-### \<Name interface m\>
 
 ## Level 2
 
-![Level 2](assets/luke/level-2-diagram.svg)
+![Level 2 Backend Building Blocks](assets/luke/level-2-backend-diagram.svg)
 
-### White Box *\<building block 1\>*
+### Contained blackboxes
+| Building Block | Description |
+|---|---|
+| Request Handler | Interpret requests from front end, call corresponding back end modules, access stored meeting data, and return results to front end |
+| Audio Processing | Process raw audio files with ffmpeg |
+| Transcript Generation | Generate structured transcripts from processed audio files with Faster-Whisper |
+| Summarize | Coordinate communication with OpenAI API and generate structured summaries of passed transcripts  |
+---
 
-*\<white box template\>*
+### Interfaces
+| Interface | Direction | Description |
+|---|---|---|
+| Backend API | Front End ↔ Backend  | Receives uploaded audio files and returns structured summaries |
+| Audio Processing CLI | Request Handler ↔ Audio Processing | Initiates audio processing and returns completion status |
+| Transcription CLI | Request Handler ↔ Transcript Generation | Initiates transcription with Faster-Whisper and returns completion status |
+| Summarization CLI | Request Handler ↔ Summarize | Initializes summarization and returns completion status|
+| OpenAI API | Summarize ↔ OpenAI | Sends transcripts and receives structured summaries from OpenAI|
+| Database Access | Backend Components ↔ Database | Each component individually manages reading and writing to the database. | 
 
-### White Box *\<building block 2\>*
+---
 
-*\<white box template\>*
-
-…​
-
-### White Box *\<building block m\>*
-
-*\<white box template\>*
-
-## Level 3
-
-![Level 3](assets/luke/level-3-diagram.svg)
-
-### White Box \<\_building block x.1\_\>
-
-*\<white box template\>*
-
-### White Box \<\_building block x.2\_\>
-
-*\<white box template\>*
-
-### White Box \<\_building block y.1\_\>
-
-*\<white box template\>*
 
 # Runtime View (Rita + Keyan 😀)
 
