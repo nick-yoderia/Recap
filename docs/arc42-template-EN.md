@@ -158,9 +158,6 @@ React provides users with a single interface to upload meeting recordings from t
 
 # Runtime View (Rita + Keyan 😀)
 
-- user upload an audio file frontend -> check if file is valid -> Axios send http request to RestAPI -> backend do the summary -> RestAPI send HTTP to frontend Axios -> Frontend display the summary
-- Backend process:
-- invalid file submitted -> display a message to the user, automatically reject the file
 
 ## 6.1 User Uploads Invalid File 
 
@@ -173,8 +170,19 @@ sequenceDiagram
     Frontend->>User: Render: Error component
 ```
 
+## 6.2  Upload Valid File  
 
-## 6.2 Backend API Fails 
+Valid files: The audio summary is displayed on the frontend. 
+```mermaid
+sequenceDiagram
+  actor User
+  participant frontend as Frontend
+  User->>frontend: Upload file.wav
+  frontend->>User: Render: Loading component
+```
+
+
+## 6.3 Backend API Fails 
 
 This scenario showcases what would happen if one of the backend API’s were to fail. The failure would be logged in the database, and the error message communicated to the user. This would be similar to the Summary Client failing, except the transcription of the meeting would be saved in the database. You can assume the Convert Client succeeded in the following scenario: 
 
@@ -208,7 +216,7 @@ sequenceDiagram
     RH->>Frontend: API: Meeting.status=failed
     Frontend->>User: Render: Error component
 ```
-## 6.3 Display all Meetings for user 
+## 6.4 Display all Meetings for user 
 ```mermaid
 sequenceDiagram
 actor User
