@@ -157,16 +157,71 @@ React provides users with a single interface to upload meeting recordings from t
 - Backend process:
 - invalid file submitted -> display a message to the user, automatically reject the file
 
-## \<Runtime Scenario 1\>
+## 6.1 User Uploads Invalid File 
 
-- *\<insert runtime diagram or textual description of the scenario\>*
+Invalid Files: Frontend restricts uploaded files types to audio only. 
+```mermaid
+sequenceDiagram
+    actor User
+    participant Frontend
+    User->>Frontend: Uploads .png
+    Frontend->>User: Render: Error component
+```
 
-- *\<insert description of the notable aspects of the interactions
-  between the building block instances depicted in this diagram.\>*
 
-## \<Runtime Scenario 2\>
+## 6.2 Backend API Fails 
 
-## …​
+This scenario showcases what would happen if one of the backend API’s were to fail. The failure would be logged in the database, and the error message communicated to the user. This would be similar to the Summary Client failing, except the transcription of the meeting would be saved in the database. You can assume the Convert Client succeeded in the following scenario: 
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant Frontend
+    participant RH as Request Handler
+    participant TC as Transcribe Client 
+    participant DB as Database
+
+    User->>Frontend: Uploads file.wav
+    Frontend->>RH: API: POST/meetings
+    RH->>DB: Query: Insert MeetingID status=uploaded
+    RH->>Frontend: API: MeetingID
+    Note over Frontend: Pipeline started 
+
+    RH->>TC: API: Transcribe file.wav
+    RH->>DB: Query: Update MeetingID status=transcribing
+
+    loop meeting.status != ready OR fail
+        Frontend->>RH: API: GET/meetings/MeetingID
+        RH->>DB: Query: MeetingID 
+        DB->>RH: Query: Meeting, current summary, decisions, actions, outline 
+        RH->>Frontend: API: Meeting.status=transcribing
+        Frontend->>User: Render: Loading component
+    end
+
+    TC->>RH: API: ERROR transcribe failed 
+    RH->>DB: Query: Insert MeetingID status=failed
+    RH->>Frontend: API: Meeting.status=failed
+    Frontend->>User: Render: Error component
+```
+## 6.3 Display all Meetings for user 
+```mermaid
+sequenceDiagram
+actor User
+participant Frontend
+participant RH as Request Handler
+participant DB as Database
+    
+   
+Frontend->>RH: API: GET/meetings
+RH->>DB: Query: Get meetings id=user_id 
+
+Frontend->>RH: API: fetch()
+
+DB->>RH: Results: Meetings for user_id  
+RH->>Frontend: API: List of Meetings
+Frontend->>User:Render: Meetings
+```
+
 
 ## \<Runtime Scenario n\>
 
