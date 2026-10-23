@@ -69,16 +69,41 @@ Work in progress:
 
 ## Stakeholders (Charles)
 
-TODO
-
-| Role/Name    | Contact         | Expectations        |
-|--------------|-----------------|---------------------|
-| *\<Role-1\>* | *\<Contact-1\>* | *\<Expectation-1\>* |
-| *\<Role-2\>* | *\<Contact-2\>* | *\<Expectation-2\>* |
+| Role/Name             | Contact       | Expectations                                                                                                                                             |
+| --------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Meeting Chair/Host    | <Contact>     | Wants reliable meeting notes with fast turnaround time containing relevant action items and key decisions.                                               |
+| Meeting Participant   | <Contact>     | Wants to make sure meeting software is compliant with security and privacy policy.                                                                       |
+| Development Team      | Recap Discord | Wants the application to work across operating systems, with fast, reliable transcriptions using free LLM tokens through EDU credits or running locally. |
+| Capstone Sponsor      | Amanda        | Manages and evaluates the project, including implementation, guidelines, feasibility, and milestones.                                                    |
+| Data Privacy Officers | <Contact>     | Wants to make sure meeting software is compliant with security and privacy policy.                                                                       |
 
 # Architecture Constraints (Charles)
 
-TODO
+### **Technical Constraints**
+
+| Constraint                          | Explanation                                                                                                                    |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| FastAPI                             | Backend framework to asynchronously route API requests, manage transcriptions, summarizations, and link to the React frontend. |
+| WhisperAPI/FFMpeg                   | Local speech-to-text pipeline used to process audio files and extract accurate transcripts efficiently.                        |
+| ResponsesAPI                        | Used to generate meeting summaries, action items, and key decisions.                                                           |
+| Database Management System (SQLite) | Relational Database storage used for tracking states, audio files, and meeting metadata                                        |
+| Python                              | Language used for backend framework and processing scripts.                                                                    |
+| Vite                                | Used for bundling and local development rendering.                                                                             |
+| React-router-dom                    | Library used to handle single-page application routing and navigation.                                                         |
+| TailwindCSS                         | CSS Framework for styling the application                                                                                      |
+| Javascript                          | Language used for React application.                                                                                           |
+| React                               | Frontend framework used to build the user interface.                                                                           |
+| Docker                              | Containerized platform for execution across different host machines.                                                           |
+| Axios                               | Library used to handle single-page application routing and navigation.                                                         |
+
+### **Organizational Constraints**
+
+| Constraint                 | Explanation                                                                             |
+| -------------------------- | --------------------------------------------------------------------------------------- |
+| Team                       | Charles, Dennis, Keyan, Luke, Nick, Rita                                                |
+| Project Time               | Seven-month total project time. Prototype ready in December and a full showcase in May. |
+| Budget                     | No money for third-party hosting or APIs. Everything must rely on local compute.        |
+| Version Control Management | Git repository with commit history, feature branches, main branches pushed to GitHub.   |
 
 # Context and Scope (Nick)
 
