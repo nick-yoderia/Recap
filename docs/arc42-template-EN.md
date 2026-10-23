@@ -137,6 +137,9 @@ React provides users with a single interface to upload meeting recordings from t
 
 ![Level 1 Building Blocks](assets/luke/level-1-building-block-diagram.svg)
 
+### Motivation
+
+We have chosen to separate the primary architectural components of Recap into a Front End, Back End, and a Database. This separation ensures responsibility for the primary functions of Recap are owned by their respective components. This establishes a clear boundary between parts of the system the user will interact with and critical internal system functionality.
 
 ### Contained blackboxes
 | Building Block | Description |
@@ -158,6 +161,12 @@ React provides users with a single interface to upload meeting recordings from t
 ## Level 2
 
 ![Level 2 Backend Building Blocks](assets/luke/level-2-backend-diagram.svg)
+
+### Motivation
+
+Recap's Back End has been split into several independent components that all perform a specific function within the system. The Request Handler coordinates communication between the other functional components and the Front End. This separation of responsibilities allows us to develop, debug, and modify the components largely in isolation and will contribute to the success of this project. These components will communicate with each other through predefined interfaces, allowing changes to the internals of a component to not affect the system as a whole. 
+
+
 
 ### Contained blackboxes
 | Building Block | Description |
