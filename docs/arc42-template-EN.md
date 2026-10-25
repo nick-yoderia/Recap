@@ -318,19 +318,28 @@ TODO: Waiting on Building Block View
 ## Quality Scenarios
 
 # Risks and Technical Debts (Dennis)
+Recap is a brand new project that we are building from the ground up. Therefore, that comes with many risks that may arise during our production of this project.
+
+| Risk / debt item | Why it matters | Mitigation / decision |
+| :--------------- | :------------- | :-------------------- |
+| AI processing    | Transcriptions and other file processing may take a long time, especially with a large file, providing an unsatisfactory experience for users | Extensive testing with different file sizes, setting file size limits or job limits|
+| File size and Compatibilty | Files uploaded may vary in size, formats, and audio quality | Set limits on what file types are accepted, and communicate any errors in processing or transcribing to the user through the UI |
+| Data Handling and Security | Processed files and information should be kept private, and the should only be avaliable to the user themselves | Each user gets their own owner_id that is that is kept secret from the database, and is tied to the cookies of the browser. Other users get their own owner_id, and meeting summaries are not searchable or avaliable to the public.
+
 
 # Glossary (Dennis)
 
 | Term | Definition |
 |------|------------|
-| Whisper | |
-| Faster Whisper | |
-| Open AI | |
-| Python | |
-| UV Packet Manager | |
-| Git Hub | |
-| Vite | |
-| Tailwind | |
-| Axios | |
-| React-router-dom | |
-| Fast API | |
+| Whisper | Whisper is an open-source automatic speech recognition (ASR) system, devloped by OpenAI, and converts spoken audio into text |
+| Faster-whisper | Faster-whisper is an optimized, high-performance re-implementation of OpenAI's Whisper ASR model that uses CTranslate2, which is a fast inerence engine for Transformer models |
+| OpenAI | OpenAI is an American artificial intelligence corporation that has developed products like ChatGPT, DALL-E, and Whisper|
+| API | API, or Application Programming Interface, is a set of rules and protocals that allow different software to communicate and share data, and are used by developers to plug in existing software, data, and services |
+| Python | Python is a high-level programming language and the industry standard for machine learning and artificial intelligence|
+| UV Packet Manager | UV Packet Manager is an extremely fast, Rust-based Python package and project manager|
+| GitHub | GitHub is a cloud-based developer platform used to create, store, manage, and share code|
+| Vite | Vite is a frontend build tool and local development server that works with React and vanilla JavaScript/Typescript, among other things|
+| Tailwind | Tailwind is an open-source CSS framework that allows you to build custom user interfaces directly inside the HTML markup|
+| Axios | Axios is a JavaScript library used to send HTTP requests from web browsers or Node.js backends to servers and APIs|
+| React-router-dom | React-router-dom is a library that makes navigating between pages easier|
+| Fast API | Fast API is a high-performance web framework for building backend APIs with Python|
