@@ -124,8 +124,7 @@ Once processed, transcriptions and any other generated data will be stored using
 ## Scope and Context
 
 ```mermaid
-%%{init: {"flowchart": {"htmlLabels": false}}}%%
-flowchart LR
+flowchart TB
     user["User<br>(Actor)"]
     recap["Recap (System)<br>Turn meeting recordings<br>into actionable summaries"]
     openai["OpenAI<br>(System)"]
@@ -147,8 +146,7 @@ React provides users with a single interface to upload meeting recordings from t
 ## Level 1
 
 ```mermaid
-%%{init: {"flowchart": {"htmlLabels": false}}}%%
-flowchart LR
+flowchart TB
     user["User<br>(Actor)"]
     subgraph recap["Recap (System): Turn meeting recordings into actionable summaries"]
         fe["Front End<br>(App)"]
@@ -161,8 +159,8 @@ flowchart LR
     fe -- "Display structured<br>meeting summary" --> user
     fe -- "Send raw audio path<br>for processing" --> be
     be -- "Return structured<br>summary and<br>processing status" --> fe
-    be -- "Store metadata,<br>processed audio and<br>transcript, or summary" --> db
-    db -- "Retrieves stored<br>meeting data" --> be
+    be -- "Store metadata,<br>processed audio,<br>transcript,<br>or summary" --> db
+    db -- "Retrieves<br>stored<br>meeting data" --> be
     be -- "Send meeting<br>transcript to LLM" ---> openai
     openai -- "LLM writes structured<br>meeting summary" ---> be
 ```
@@ -191,7 +189,6 @@ We have chosen to separate the primary architectural components of Recap into a 
 ## Level 2
 
 ```mermaid
-%%{init: {"flowchart": {"htmlLabels": false}}}%%
 flowchart TB
     fe["Front End<br>(App)"]
     subgraph backend["Back End (App)"]
