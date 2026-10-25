@@ -124,6 +124,7 @@ Once processed, transcriptions and any other generated data will be stored using
 ## Scope and Context
 
 ```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}}}%%
 flowchart LR
     user["User<br>(Actor)"]
     recap["Recap (System)<br>Turn meeting recordings<br>into actionable summaries"]
@@ -146,6 +147,7 @@ React provides users with a single interface to upload meeting recordings from t
 ## Level 1
 
 ```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}}}%%
 flowchart LR
     user["User<br>(Actor)"]
     subgraph recap["Recap (System): Turn meeting recordings into actionable summaries"]
@@ -189,6 +191,7 @@ We have chosen to separate the primary architectural components of Recap into a 
 ## Level 2
 
 ```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}}}%%
 flowchart TB
     fe["Front End<br>(App)"]
     subgraph backend["Back End (App)"]
