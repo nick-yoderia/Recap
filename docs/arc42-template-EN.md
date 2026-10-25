@@ -123,7 +123,17 @@ Once processed, transcriptions and any other generated data will be stored using
 
 ## Scope and Context
 
-![Scope and Context](assets/luke/scope-and-context-diagram.svg)
+```mermaid
+flowchart LR
+    user["User<br>(Actor)"]
+    recap["Recap (System)<br>Turn meeting recordings<br>into actionable summaries"]
+    openai["OpenAI<br>(System)"]
+
+    user -- "Uploads meeting<br>recording" --> recap
+    recap -- "Display structured<br>meeting summary" --> user
+    recap -- "Send meeting<br>transcript to LLM" --> openai
+    openai -- "LLM writes structured<br>meeting summary" --> recap
+```
 
 React provides users with a single interface to upload meeting recordings from their local filesystem and view structured summaries of the audio content. The system interfaces with the OpenAI API to generate the summaries from meeting transcripts. 
 
@@ -135,7 +145,25 @@ React provides users with a single interface to upload meeting recordings from t
 
 ## Level 1
 
-![Level 1 Building Blocks](assets/luke/level-1-building-block-diagram.svg)
+```mermaid
+flowchart LR
+    user["User<br>(Actor)"]
+    subgraph recap["Recap (System): Turn meeting recordings into actionable summaries"]
+        fe["Front End<br>(App)"]
+        be["Back End<br>(App)"]
+        db[("Database<br>(Store)")]
+    end
+    openai["OpenAI<br>(System)"]
+
+    user -- "Uploads meeting<br>recording" --> fe
+    fe -- "Display structured<br>meeting summary" --> user
+    fe -- "Send raw audio path<br>for processing" --> be
+    be -- "Return structured<br>summary and<br>processing status" --> fe
+    be -- "Store metadata,<br>processed audio and<br>transcript, or summary" --> db
+    db -- "Retrieves stored<br>meeting data" --> be
+    be -- "Send meeting<br>transcript to LLM" ---> openai
+    openai -- "LLM writes structured<br>meeting summary" ---> be
+```
 
 ### Motivation
 
@@ -160,7 +188,30 @@ We have chosen to separate the primary architectural components of Recap into a 
 
 ## Level 2
 
-![Level 2 Backend Building Blocks](assets/luke/level-2-backend-diagram.svg)
+```mermaid
+flowchart TB
+    fe["Front End<br>(App)"]
+    subgraph backend["Back End (App)"]
+        rh["Request Handler<br>(Component)"]
+        audio["Audio Processing<br>(Component)"]
+        transcript["Transcript Generator<br>(Component)"]
+        summarize["Summarize<br>(Component)"]
+    end
+    db[("Database<br>(Store)")]
+    openai["OpenAI<br>(System)"]
+
+    fe -- "Send raw audio path<br>for processing" --> rh
+    rh -- "Return structured summary<br>and processing status" --> fe
+    rh <-- "Request audio processing /<br>Return processing status" --> audio
+    rh <-- "Request transcript generation /<br>Return transcription status" --> transcript
+    rh <-- "Request summarization /<br>Return summarized transcript status" --> summarize
+    audio -- "Save processed<br>audio" --> db
+    transcript -- "Store generated<br>transcript" --> db
+    summarize -- "Persist summary<br>from OpenAI" --> db
+    db -- "Retrieve processed audio, transcripts,<br>and completed summaries" --> rh
+    summarize -- "Request structured<br>summary" --> openai
+    openai -- "Return generated<br>summary" --> summarize
+```
 
 ### Motivation
 
