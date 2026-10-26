@@ -325,15 +325,15 @@ Frontend->>User:Render: Meetings
 
 # Deployment View (Nick)
 
-## Infrastructure Level 1
+## Infrastructure
 
 ```mermaid
 flowchart TB
  subgraph container["Recap Container (Docker)"]
         api["API app (FastAPI)<br>API + serves React build"]
-        convert["Convert Job (CLI)<br>FFmpeg"]
-        transcribe["Transcribe Job (CLI)<br>Faster-Whisper"]
-        summarize["Summarize Job (CLI)"]
+        convert["Convert Job<br>(CLI)<br>FFmpeg"]
+        transcribe["Transcribe Job<br>(CLI)<br>Faster-Whisper"]
+        summarize["Summarize Job<br>(CLI)"]
   end
  subgraph host["Host Machine"]
         container
@@ -360,13 +360,62 @@ We are targeting a complete self-hosted web application. The main priorities are
 - **Privacy**: The transcript is the only user data that leaves the host machine; it is sent to the external LLM for the summarize function. Otherwise, user data stays on the host machine. Recap keeps a copy of the user's audio file after FFmpeg conversion, along with the resulting transcription and summary.
 
 ### **Mapping of Building Blocks to Infrastructure**
-TODO: Waiting on Building Block View
+| Building Block       | Software Artifact                        | Infrastructure Element |
+| -------------------- | ---------------------------------------- | ---------------------- |
+| Front End            | React build (static HTML, JS, CSS)       | User's Browser         |
+| Request Handler      | FastAPI app (Python)                     | API app                |
+| Audio Processing     | Convert CLI script (Python + FFmpeg)     | Convert Job            |
+| Transcript Generator | Transcribe CLI script (Faster-Whisper)   | Transcribe Job         |
+| Summarize            | Summarize CLI script (Python)            | Summarize Job          |
+| Database             | SQLite file (`data/recap.db`)            | Persistent Volume      |
 
 # Quality Requirements (Nick)
 
 ## Quality Requirements Overview
 
+The first five branches are the quality goals from section 1.2 that carry over to this section (Understandability, Reliability, Compatibility, Usability, and Interoperability). In addition to the high priority quality goals we will also be considering performance, privacy, and modifiability as lower priority requirements. They also matter, but they do not pose significant risk to the project if missed. Each leaf links to a scenario in the next section.
+
+```mermaid
+mindmap
+  root((**Qualities**))
+    **Understandability**
+      Summary is structured, not a wall of text
+    **Reliability**
+      Invalid or corrupt files are handled gracefully
+      External API failures are handled gracefully
+    **Compatibility**
+      Accepts common meeting recording formats
+      Runs on any host OS and screen size
+    **Usability**
+      UI is intuitive to use
+      Returning users see their past recaps
+    **Interoperability**
+      REST API for meetings and pipeline status
+    **Performance**
+      API stays responsive while jobs run
+    **Privacy**
+      Only the transcript leaves to third party LLM
+    **Modifiability**
+      LLM or Whisper model can be swapped locally
+      Back-end components are independent modules
+```
+
 ## Quality Scenarios
+
+| Quality           | Scenario                                                                  | Response                                                                                  | How we verify                                                                                 |
+| ----------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Understandability | A user uploads a meeting recording                                        | The recap is split into a short summary, key decisions, action items, and a topic outline | All four sections of the recap are present and verfied against manual human summaries         |
+| Reliability       | A user uploads a corrupt file or an unsupported file type                 | The back end convert job rejects unsupported types and returns a failure to front end     | The user sees a clear error message and the application keeps running                         |
+| Reliability       | The LLM API returns an error during summarization                         | The meeting is tried again and marked `failed` after a backoff limit                      | The user is notified of the failure if backoff limit is reached                               |
+| Compatibility     | A user uploads an .mp4 or .WAV instead of an .mp3                         | The recording is converted, transcribed, and summarized                                   | mp3, mp4, and WAV files all reach `ready` with no settings changed by the user                |
+| Compatibility     | Recap is run on Linux, macOS, or  Windows                                 | The user portal renders on any supported browser regardless of operating system           | Rendered webpage matches developer intent                                                     |
+| Usability         | A first time user opens Recap with no instructions                        | The user finds the upload control and follows the processing status                       | The user starts an upload within 1 minute and can find/download their summary                 |
+| Usability         | A user returns to Recap in the same browser a week later                  | Recap lists the user's past recaps                                                        | Past recaps open and export without logging in                                                |
+| Interoperability  | A client calls the REST API to create, list, and check meetings           | The API creates the meeting, lists meetings, and returns the pipeline status              | The API delivers expected responses with no errors                                            |
+| Performance       | A user loads their recap history while another recording is processed     | The API answers right away because jobs run as separate subprocesses                      | The history loads in under 1 second                                                           |
+| Privacy           | A user uploads a recording                                                | Only the transcript is sent to the third party LLM                                        | No audio files or user IDs appear in outbound requests                                        |
+| Modifiability     | The team switches LLM provider or Whisper model size                      | Only the Summarize or Transcribe component changes                                        | No other component's code is modified                                                         |
+| Modifiability     | A developer rewrites the internals of one back end component              | Other components keep working through the same interfaces                                 | No changes are needed outside that component                                                  |
 
 # Risks and Technical Debts (Dennis)
 Recap is a brand new project that we are building from the ground up. Therefore, that comes with many risks that may arise during our production of this project.
