@@ -1,21 +1,11 @@
 ---
-date: October 23 2026
+last revision: October 26 2026
 title: Recap
 ---
 
 # 
 
-**About arc42**
-
-arc42, the template for documentation of software and system
-architecture.
-
-Template Version 9.0-EN. (based upon AsciiDoc version), July 2025
-
-Created, maintained and © by Dr. Peter Hruschka, Dr. Gernot Starke and
-contributors. See <https://arc42.org>.
-
-# Introduction and Goals (Keyan)
+# Introduction and Goals
 
 Recap is a project focused on improving meeting effectiveness and efficiency through AI-powered summarization. It addresses the issues of meetings often going undocumented, manual note taking distracting participants, and important decisions and responsibilities being overlooked. Recap accomplishes this by extracting and organizing the following information from meetings: 
 
@@ -29,7 +19,7 @@ Once an audio file is uploaded, the system processes the recording, generates a 
 The system should process audio files reliably and generate accurate and understandable summaries within a reasonable amount of time. Errors should not cause the application to fail, they should be handled gracefully and communicated clearly to the user. The user interface should also be intuitive and provide a seamless experience for users. 
 
 
-## Requirements Overview (Rita)
+## Requirements Overview
 
 ### **Contents**
 
@@ -48,14 +38,10 @@ The main purpose of Recap is to provide a structured summary for the user. The s
 The system is intended to provide an accurate summary where users can refer back to the meeting information later. 
 
 (not main features)/ detailed requirement table
-- After the user upload the audio file, audio file will be deleted
+- After the user upload the audio file, audio file will be deleted after processing
 - Display a file upload percentage
 
-### **Form**
-
-TODO
-
-## Quality Goals (Keyan)
+## Quality Goals
 
 Work in progress:
 
@@ -67,17 +53,17 @@ Work in progress:
 | Usability | The User interface should be attractive and intuitive for all users. The database should store user's information on a per browser basis, so past recaps can be displayed and re-opened. |
 | Interoperability | The Application should provide a simple Rest API that is capable of grabbing users past meetings, posting new meetings, and communicating what stage the pipeline is in. |
 
-## Stakeholders (Charles)
+## Stakeholders
 
 | Role/Name             | Contact       | Expectations                                                                                                                                             |
 | --------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Meeting Chair/Host    | <Contact>     | Wants reliable meeting notes with fast turnaround time containing relevant action items and key decisions.                                               |
 | Meeting Participant   | <Contact>     | Wants to make sure meeting software is compliant with security and privacy policy.                                                                       |
-| Development Team      | Recap Discord | Wants the application to work across operating systems, with fast, reliable transcriptions using free LLM tokens through EDU credits or running locally. |
+| Development Team      | Recap Discord | Wants the application to work across operating systems, with fast, reliable transcriptions using free LLM tokens or running locally. |
 | Capstone Sponsor      | Amanda        | Manages and evaluates the project, including implementation, guidelines, feasibility, and milestones.                                                    |
 | Data Privacy Officers | <Contact>     | Wants to make sure meeting software is compliant with security and privacy policy.                                                                       |
 
-# Architecture Constraints (Charles)
+# Architecture Constraints
 
 ### **Technical Constraints**
 
@@ -86,7 +72,7 @@ Work in progress:
 | FastAPI                             | Backend framework to asynchronously route API requests, manage transcriptions, summarizations, and link to the React frontend. |
 | WhisperAPI/FFMpeg                   | Local speech-to-text pipeline used to process audio files and extract accurate transcripts efficiently.                        |
 | ResponsesAPI                        | Used to generate meeting summaries, action items, and key decisions.                                                           |
-| Database Management System (SQLite) | Relational Database storage used for tracking states, audio files, and meeting metadata                                        |
+| Database Management System (SQLite) | Relational Database storage used for tracking states and meeting metadata                                        |
 | Python                              | Language used for backend framework and processing scripts.                                                                    |
 | Vite                                | Used for bundling and local development rendering.                                                                             |
 | React-router-dom                    | Library used to handle single-page application routing and navigation.                                                         |
@@ -102,14 +88,14 @@ Work in progress:
 | -------------------------- | --------------------------------------------------------------------------------------- |
 | Team                       | Charles, Dennis, Keyan, Luke, Nick, Rita                                                |
 | Project Time               | Seven-month total project time. Prototype ready in December and a full showcase in May. |
-| Budget                     | No money for third-party hosting or APIs. Everything must rely on local compute.        |
+| Budget                     | No money for third-party hosting or APIs. Everything must rely on local compute or free tools |
 | Version Control Management | Git repository with commit history, feature branches, main branches pushed to GitHub.   |
 
-# Context and Scope (Nick)
+# Context and Scope
 
 Recap is a web application that takes a speech recording from the user's browser and transcribes it. It relies on an external LLM to transform that transcription into a concise summary. Recording meetings, hosting meetings, live listening, managing accounts, and acting on the meeting summaries are outside of the scope. Recap is only responsible for processing files provided by the user and a history of previous uploads by said user is provided through returning user's browser cookies.
 
-# Solution Strategy (Dennis)
+# Solution Strategy
 
 The application will be a web-based platform that will process audio files using AI to return a transcription and other AI-powered features, while using cookies to keep track of the user’s past transcriptions in a database. Therefore, the structure of the project is three parts that includes the frontend, backend, and database.
 
@@ -119,7 +105,7 @@ All AI processing will be happening in the background, so that the frontend is n
 
 Once processed, transcriptions and any other generated data will be stored using SQLite, allowing users to return and view any past transcriptions. For security reasons, the file itself will not be stored anywhere, only the resulting generated data. This data will be tracked using long-lived user cookies, so there will be no login required.
 
-# Building Block View (Luke)
+# Building Block View
 
 ## Scope and Context
 
@@ -152,6 +138,7 @@ flowchart TB
         fe["Front End<br>(App)"]
         be["Back End<br>(App)"]
         db[("Database<br>(Store)")]
+        media[("Media Files<br>(Store)")]
     end
     openai["OpenAI<br>(System)"]
 
@@ -159,8 +146,9 @@ flowchart TB
     fe -- "Display structured<br>meeting summary" --> user
     fe -- "Send raw audio path<br>for processing" --> be
     be -- "Return structured<br>summary and<br>processing status" --> fe
-    be -- "Store metadata,<br>processed audio,<br>transcript,<br>or summary" --> db
+    be -- "Store metadata,<br>media path,<br>transcript,<br>or summary" --> db
     db -- "Retrieves<br>stored<br>meeting data" --> be
+    be <-- "Save / read<br>audio files" --> media
     be -- "Send meeting<br>transcript to LLM" ---> openai
     openai -- "LLM writes structured<br>meeting summary" ---> be
 ```
@@ -174,7 +162,8 @@ We have chosen to separate the primary architectural components of Recap into a 
 |---|---|
 | Front End | Provide the interface that users will interact with when uploading meeting recordings or viewing structured meeting summaries. |
 | Back End| Process recordings, generate transcripts with Whisper, interact with OpenAI API, and manage data transfer between front end and database. |
-| Database | Record metadata about meeting recordings, transcripts, and summaries|
+| Database | Record metadata about meeting recordings, transcripts, and summaries. |
+| Media Files | Hold uploaded and processed audio files on disk until processing finishes, the Database stores only their path |
 ---
 ### Interfaces
 | Interface | Direction | Description |
@@ -182,6 +171,7 @@ We have chosen to separate the primary architectural components of Recap into a 
 | User Interface | User ↔ Front End | Uploads recordings and displays summaries |
 | Backend API | Front End ↔ Backend | Send raw audio for processing and return structured summary and processing status | 
 | Persistence API | Backend ↔ Database | Manage communication from backend to database |
+| File Storage | Backend ↔ Media Files | Write and read audio files on disk |
 | OpenAI API | Backend ↔ OpenAI | Sends transcripts and receives structured summaries |
 ---
 
@@ -198,6 +188,7 @@ flowchart TB
         summarize["Summarize<br>(Component)"]
     end
     db[("Database<br>(Store)")]
+    media[("Media Files<br>(Store)")]
     openai["OpenAI<br>(System)"]
 
     fe -- "Send raw audio path<br>for processing" --> rh
@@ -205,10 +196,11 @@ flowchart TB
     rh <-- "Request audio processing /<br>Return processing status" --> audio
     rh <-- "Request transcript generation /<br>Return transcription status" --> transcript
     rh <-- "Request summarization /<br>Return summarized transcript status" --> summarize
-    audio -- "Save processed<br>audio" --> db
+    audio -- "Save processed<br>audio" --> media
+    transcript -- "Read processed<br>audio" --> media
     transcript -- "Store generated<br>transcript" --> db
     summarize -- "Persist summary<br>from OpenAI" --> db
-    db -- "Retrieve processed audio, transcripts,<br>and completed summaries" --> rh
+    db -- "Retrieve meeting metadata, transcripts,<br>and completed summaries" --> rh
     summarize -- "Request structured<br>summary" --> openai
     openai -- "Return generated<br>summary" --> summarize
 ```
@@ -216,7 +208,6 @@ flowchart TB
 ### Motivation
 
 Recap's Back End has been split into several independent components that all perform a specific function within the system. The Request Handler coordinates communication between the other functional components and the Front End. This separation of responsibilities allows us to develop, debug, and modify the components largely in isolation and will contribute to the success of this project. These components will communicate with each other through predefined interfaces, allowing changes to the internals of a component to not affect the system as a whole. 
-
 
 
 ### Contained blackboxes
@@ -237,11 +228,11 @@ Recap's Back End has been split into several independent components that all per
 | Summarization CLI | Request Handler ↔ Summarize | Initializes summarization and returns completion status|
 | OpenAI API | Summarize ↔ OpenAI | Sends transcripts and receives structured summaries from OpenAI|
 | Database Access | Backend Components ↔ Database | Each component individually manages reading and writing to the database. | 
+| File Access | Audio Processing, Transcript Generation ↔ Media Files | Write processed audio and read it for transcription |
 
 ---
 
-
-# Runtime View (Rita + Keyan 😀)
+# Runtime View
 
 
 ## 6.1 User Uploads Invalid File 
@@ -269,14 +260,14 @@ sequenceDiagram
 
 ## 6.3 Backend API Fails 
 
-This scenario showcases what would happen if one of the backend API’s were to fail. The failure would be logged in the database, and the error message communicated to the user. This would be similar to the Summary Client failing, except the transcription of the meeting would be saved in the database. You can assume the Convert Client succeeded in the following scenario: 
+This scenario showcases what would happen if one of the backend API’s were to fail. The failure would be logged in the database, and the error message communicated to the user. This would be similar to the Summarize Job failing, except the transcription of the meeting would be saved in the database. You can assume the Convert Job succeeded in the following scenario: 
 
 ```mermaid
 sequenceDiagram
     actor User
     participant Frontend
     participant RH as Request Handler
-    participant TC as Transcribe Client 
+    participant TC as Transcribe Job
     participant DB as Database
 
     User->>Frontend: Uploads file.wav
@@ -323,7 +314,7 @@ Frontend->>User:Render: Meetings
 
 ## \<Runtime Scenario n\>
 
-# Deployment View (Nick)
+# Deployment View
 
 ## Infrastructure
 
@@ -357,7 +348,7 @@ We are targeting a complete self-hosted web application. The main priorities are
 - **Responsiveness**: The API and web server relay jobs to the parallel CLI subprocesses. This keeps them free to handle incoming traffic without having to wait for running jobs to complete before serving other users.
 - **Persistence and Reliability**: The database and data volume persist across container restarts, rebuilds, and crashes. The downside of running a single Docker container on a single host machine is a single point of failure. If the host goes down, or gets so much traffic that CPU load becomes too high, the application will respond slowly or not at all.
 - **Scalability**: This model does not provide scalability on its own. It cannot scale to high traffic that exhausts CPU or GPU load. However, its infrastructure layout could be converted to take advantage of event streams and cluster configurations later with some refactoring.
-- **Privacy**: The transcript is the only user data that leaves the host machine; it is sent to the external LLM for the summarize function. Otherwise, user data stays on the host machine. Recap keeps a copy of the user's audio file after FFmpeg conversion, along with the resulting transcription and summary.
+- **Privacy**: The transcript is the only user data that leaves the host machine. It is sent to the external LLM for the summarize function. Otherwise, user data stays on the host machine. Recap temporarily keeps a copy of the user's audio file until FFmpeg conversion and summarize job, then keeps resulting transcription and summary until user specified deletion.
 
 ### **Mapping of Building Blocks to Infrastructure**
 | Building Block       | Software Artifact                        | Infrastructure Element |
@@ -368,14 +359,19 @@ We are targeting a complete self-hosted web application. The main priorities are
 | Transcript Generator | Transcribe CLI script (Faster-Whisper)   | Transcribe Job         |
 | Summarize            | Summarize CLI script (Python)            | Summarize Job          |
 | Database             | SQLite file (`data/recap.db`)            | Persistent Volume      |
+| Media Files          | Audio files (`data/media/`)              | Persistent Volume      |
 
-# Quality Requirements (Nick)
+# Quality Requirements
 
 ## Quality Requirements Overview
 
 The first five branches are the quality goals from section 1.2 that carry over to this section (Understandability, Reliability, Compatibility, Usability, and Interoperability). In addition to the high priority quality goals we will also be considering performance, privacy, and modifiability as lower priority requirements. They also matter, but they do not pose significant risk to the project if missed. Each leaf links to a scenario in the next section.
 
 ```mermaid
+---
+config:
+  layout: tidy-tree
+---
 mindmap
   root((**Qualities**))
     **Understandability**
@@ -417,7 +413,7 @@ mindmap
 | Modifiability     | The team switches LLM provider or Whisper model size                      | Only the Summarize or Transcribe component changes                                        | No other component's code is modified                                                         |
 | Modifiability     | A developer rewrites the internals of one back end component              | Other components keep working through the same interfaces                                 | No changes are needed outside that component                                                  |
 
-# Risks and Technical Debts (Dennis)
+# Risks and Technical Debts
 Recap is a brand new project that we are building from the ground up. Therefore, that comes with many risks that may arise during our production of this project.
 
 | Risk / debt item | Why it matters | Mitigation / decision |
@@ -427,7 +423,7 @@ Recap is a brand new project that we are building from the ground up. Therefore,
 | Data Handling and Security | Processed files and information should be kept private, and the should only be avaliable to the user themselves | Each user gets their own owner_id that is that is kept secret from the database, and is tied to the cookies of the browser. Other users get their own owner_id, and meeting summaries are not searchable or avaliable to the public.
 
 
-# Glossary (Dennis)
+# Glossary
 
 | Term | Definition |
 |------|------------|
