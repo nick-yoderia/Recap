@@ -4,11 +4,16 @@ import AnimatedButton from "../components/AnimatedButton"
 export default function UploadScreen () {
 
     return (
-    <div className = 'flex flex-col text-2xl space-y-15 center'>
+    <div className = 'grid grid-cols-3 gap-4 h-screen'>
+
+      <div className = 'col-span-2 col-start-2 self-center'>
           <FileUploader />
-          <div className= "flex justify-center" onClick={() => console.log("TODO: Send File to backend")}>
-            <AnimatedButton>Submit</AnimatedButton>
+          <div className = 'flex justify-center pt-10'>
+              <AnimatedButton>Submit</AnimatedButton>
           </div>
+      </div>
+
+          
     </div>
   )
 } 
