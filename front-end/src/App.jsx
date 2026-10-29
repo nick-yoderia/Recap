@@ -1,8 +1,8 @@
 import './index.css';
-import UploadScreen from './pages/UploadScrean'
+import UploadScreen from './Pages/UploadScrean'
 import {Route, Routes} from 'react-router-dom'
-import About from './pages/About'
-import Summary from './pages/Summary'
+import About from './Pages/About'
+import Summary from './Pages/Summary'
 import RecapHeader from './components/RecapHeader'
 
 function App() {
