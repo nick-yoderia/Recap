@@ -15,7 +15,6 @@ export default function FileUploader() {
     const handleDragOver = (e)=>{
         // because by default blocks for safety 
         e.preventDefault()
-        setIsDragOver(true)
     }
 
     const handleDrop = (e)=>{
@@ -26,9 +25,9 @@ export default function FileUploader() {
     return (
 
         <div
-            className='w-full max-w-3xl mx-auto flex justify-center text-white
+            className='w-full mx-auto  flex justify-center text-white
                     rounded-2xl outline-3 outline-dotted hover:opacity-70 overflow-hidden
-                    cursor-pointer min-h-[40vh] bg-slate-900'
+                    cursor-pointer min-h-[30vh] bg-slate-900'
 
             onClick={()=> uploadRef.current.click()}
 

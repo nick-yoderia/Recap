@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom'
 export default function RecapHeader() {
   return (
-      <nav className=" w-full bg-slate-950  h-10 text-white text-small border-b">
+      <nav className=" w-full bg-slate-950 h-10 text-white text-small border-b">
         <div className="font-bold max-w-7xl mx-auto flex justify-between">
           {/*add logo on left later? */}
           <h1 className="text-left text-2xl">
