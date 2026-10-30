@@ -3,3 +3,6 @@
 
 # API keys
 .env
+
+# Python
+__pycache__/

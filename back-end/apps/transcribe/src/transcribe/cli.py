@@ -1,7 +1,6 @@
 from faster_whisper import WhisperModel
 
-
-def run():
+def main():
     model_size = "base"
 
     # Run on GPU with FP16
@@ -20,4 +19,4 @@ def run():
         print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
 
 if __name__ == "__main__":
-    run()
+    main()
