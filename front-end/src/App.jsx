@@ -1,16 +1,16 @@
 import './index.css';
-import UploadScreen from './pages/UploadScrean'
+import UploadScreen from './Pages/UploadScrean'
 import {Route, Routes} from 'react-router-dom'
-import About from './pages/About'
-import Summary from './pages/Summary'
+import About from './Pages/About'
+import Summary from './Pages/Summary'
 import RecapHeader from './components/RecapHeader'
 
 function App() {
 
   return (
-      <div className ='min-h-screen min-w-screen text-white bg-linear-to-t from-slate-800 to-slate-950  bg-blend-color-burn'>
-          <RecapHeader/>
-        <div className = 'max-w-7xl mx-auto '>
+      <div className ='sm:h-screen w-screen sm:overflow-hidden text-white bg-linear-to-t from-slate-800 to-slate-950  bg-blend-color-burn'>
+          <RecapHeader/> 
+        <div className = 'sm:max-w-7xl sm:mx-auto'>
           <Routes>
             <Route path="/" element={<UploadScreen/>} ></Route>
             <Route path="/About" element={<About/>}></Route>
