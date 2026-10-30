@@ -312,8 +312,6 @@ Frontend->>User:Render: Meetings
 ```
 
 
-## \<Runtime Scenario n\>
-
 # Deployment View
 
 ## Infrastructure
