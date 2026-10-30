@@ -72,6 +72,6 @@ Its straightforward. The database schema already accepts null values for webhook
 Great. Let's make that change.
 """
 
-if __name__ == "__main__":
+def main():
     summary = Summarize()
     print(summary.generate(fake_meeting))
