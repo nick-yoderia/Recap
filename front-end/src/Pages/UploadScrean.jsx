@@ -1,36 +1,43 @@
 import FileUploader from "../components/FileUploader"
 import AnimatedButton from "../components/AnimatedButton"
+import RecapDisplayBox from "../components/RecapDisplayBox"
 
 export default function UploadScreen () {
 
     return (
-    <div className = 'grid grid-cols-7 h-screen py-10 gap-15'>
+    <div className = 'sm:grid sm:grid-cols-5 sm:h-screen sm:py-5 sm:p-0 p-5 sm:gap-15'>
      
-     <div className = 'col-span-3 col-start-1 row-start-2 text-center font-mono text-5xl border-b rounded-3xl bg-linear-to-t from-slate-950 to-slate-900 shadow-2xl'>
-          Welcome  to recap! 
-          <span className = 'text-2xl  flex flex-col py-5 text-light text-teal-100 row-start-3 '>
-            Generate a new recap, or view an old one.
+     <div className = 'sm:col-span-3 sm:col-start-2 sm:row-start-2 text-center font-mono text-3xl sm:text-5xl border-b rounded-2xl'>
+          Welcome to recap! 
+          <span className = 'sm:text-2xl text-sm flex flex-col py-5 text-light text-teal-100 sm:row-start-3 '>
+            Generate new recaps or view past ones
           </span>
       </div>
 
-      <div className = 'col-span-3 col-start-1  text-small row-start-3 place-content-center'>
+      <div className = 'sm:col-span-3 sm:col-start-1 sm:pt-0 pt-10 text-md sm:row-start-4 place-content-center sm:p-1 p-3'>
           <FileUploader />
-          <div className = 'flex justify-center  pt-10 place-content-center'>
+          <div className = 'flex justify-center text-sm pt-10 place-content-center'>
               <AnimatedButton>Generate recap!</AnimatedButton>
           </div>
       </div>
 
       
-      <div className = 'col-span-4 col-start-4 row-start-1 row-span-10'>
-        <div className='text-center font-mono text-3xl pb-5'>
-          Previous recaps: 
+      <div className = 'sm:col-span-2 sm:col-start-4 sm:row-start-3 sm:row-span-10'>
+        <div className='text-center font-mono text-2xl sm:pt-0 pt-10 sm:pb-5 text-teal-100'>
+          Past recaps
         </div>
 
-        <div className=' overflow-auto border text-center gap-y-3 rounded-3xl min-h-[70vh] h-auto p-3 text-2xl'>
-          <div>  no recaps...</div>
- 
+        <div className=' overflow-auto border rounded-3xl max-h-[30vh] sm:max-h-[50vh] sm:h-auto sm:row-start-3 text-1xl'>
+          <div className = ''>
+              <RecapDisplayBox 
+              meeting={{
+                id: 123,
+                title: "None yet waiting for  DB",
+                date: "October 30, 2026",
+                status: "Completed"
+            }} /> 
+          </div>   
         </div>
-   
       </div>
     </div>
   )

@@ -25,7 +25,7 @@ export default function FileUploader() {
     return (
 
         <div
-            className='w-full mx-auto  flex justify-center text-white
+            className='sm:w-full sm:mx-auto flex justify-center text-white 
                     rounded-2xl outline-3 outline-dotted hover:opacity-70 overflow-hidden
                     cursor-pointer min-h-[30vh] bg-slate-900'
 
@@ -44,7 +44,7 @@ export default function FileUploader() {
                 onChange={handle_change}
                 onClick={handle_click}
             />
-            <h2 className='place-content-center'>{file&&file.name || 'Upload'}</h2>
+            <h2 className='place-content-center'>{file&&file.name || 'Drag and drop meeting here'}</h2>
         </div>
 
     )
