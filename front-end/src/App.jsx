@@ -13,7 +13,7 @@ function App() {
         <div className = 'sm:max-w-7xl sm:mx-auto'>
           <Routes>
             <Route path="/" element={<UploadScreen/>} ></Route>
-            <Route path="/About" element={<About/>}></Route>
+            <Route path="/Summary" element={<Summary/>}></Route>
           </Routes>
         </div>
       </div>

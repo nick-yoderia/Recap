@@ -1,6 +1,7 @@
 import FileUploader from "../components/FileUploader"
 import AnimatedButton from "../components/AnimatedButton"
 import RecapDisplayBox from "../components/RecapDisplayBox"
+import {Link} from 'react-router-dom'
 
 export default function UploadScreen () {
 
@@ -24,14 +25,13 @@ export default function UploadScreen () {
       
       <div className = 'sm:col-span-2 sm:col-start-4  sm:row-start-3'>
         <div className=' overflow-auto scrollbar-thin scrollbar-thumb-gray-400  border rounded-2xl max-h-[30vh] bg-slate-900 sm:max-h-[55vh] sm:h-auto sm:row-start-3 text-1xl'>
-          <div className = 'p-3 flex  place-content-center overflow-visible'>
-            <div className='text-center text-2xl w-full text-gray-200 '>
+          <div className = 'p-3 flex  place-content-center'>
+            <div className='text-center text-2xl w-full text-white/90 text-bold '>
               My Recaps
             </div>
-
-
           </div>
-       
+
+        <Link to='/Summary'> 
           <div className = 'overflow-hidden'>
               <RecapDisplayBox 
               meeting={{
@@ -40,8 +40,9 @@ export default function UploadScreen () {
                 date: "October 30, 2010",
                 status: "Completed"
             }} 
-            /> 
-            <RecapDisplayBox 
+            />
+          
+            <RecapDisplayBox
               meeting={{
                 id: 123,
                 title: "How to Train your Dragon",
@@ -49,7 +50,7 @@ export default function UploadScreen () {
                 status: "Completed"
             }} 
             /> 
-                       <RecapDisplayBox 
+            <RecapDisplayBox 
               meeting={{
                 id: 123,
                 title: "Kung Fu Panda",
@@ -68,6 +69,7 @@ export default function UploadScreen () {
             
             
           </div>   
+          </Link>
         </div>
       </div>
     </div>
