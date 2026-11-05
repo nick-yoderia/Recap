@@ -2,8 +2,8 @@
 
 export default function RecapDisplayBox ({ meeting }){
     return (
-        <div className="text-white bg-slate-800 border border-b-blue-50
-        rounded-3xl hover:opacity-85 p-5 flex flex-col"
+        <div className="text-white bg-slate-900 border-[0.25px] border-white/20
+         hover:opacity-85 p-5 flex flex-col "
 
         onClick = {()=> console.log("Send GET request for meeting ID")}
         >

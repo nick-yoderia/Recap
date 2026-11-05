@@ -26,8 +26,8 @@ export default function FileUploader() {
 
         <div
             className='sm:w-full sm:mx-auto flex justify-center text-white 
-                    rounded-2xl outline-3 outline-dotted hover:opacity-70 overflow-hidden
-                    cursor-pointer min-h-[30vh] bg-slate-900'
+                    rounded-2xl outline-2 outline-dotted hover:opacity-70 overflow-hidden
+                    cursor-pointer max-h-[45vh] h-full bg-slate-900'
 
             onClick={()=> uploadRef.current.click()}
 
