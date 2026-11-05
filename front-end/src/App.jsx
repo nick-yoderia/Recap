@@ -8,7 +8,7 @@ import RecapHeader from './components/RecapHeader'
 function App() {
 
   return (
-      <div className ='sm:h-screen w-screen sm:overflow-hidden text-white bg-linear-to-t from-slate-800 to-slate-950  bg-blend-color-burn'>
+      <div className ='sm:h-screen w-screen sm:overflow-hidden text-white bg-slate-950  bg-blend-color-burn'>
           <RecapHeader/> 
         <div className = 'sm:max-w-7xl sm:mx-auto'>
           <Routes>
