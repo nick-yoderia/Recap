@@ -1,6 +1,6 @@
 from faster_whisper import WhisperModel
 import pathlib
-
+import logging
 
 def ts(filename: pathlib.Path):
     model_size = "base"
@@ -15,7 +15,11 @@ def ts(filename: pathlib.Path):
 
     segments, info = model.transcribe(filename, beam_size=5)
 
-    print("Detected language '%s' with probability %f" % (info.language, info.language_probability))
+    logging.info("Detected language '%s' with probability %f" % (info.language, info.language_probability))
 
+    ret = ""
+    
     for segment in segments:
-        print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
+        ret += f"{segment.text}\n"
+
+    return ret
