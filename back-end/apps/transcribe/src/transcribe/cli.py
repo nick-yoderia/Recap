@@ -1,7 +1,6 @@
 import typer
 import pathlib
-from .transcribe import ts
-
+from transcribe import run
 
 app = typer.Typer()
 
@@ -20,9 +19,8 @@ def main(
         typer.echo(f"Error: File must be .mp3", err=True)
         raise typer.Exit(code=1)
     
-    typer.echo(f"Transcribing {video_path}")
-    typer.echo(f"Processing...")
-    ts(video_path)
+    typer.echo(f"Transcribing {video_path}", err=True)
+    print(run(video_path))
 
 if __name__ == "__main__":
     app()

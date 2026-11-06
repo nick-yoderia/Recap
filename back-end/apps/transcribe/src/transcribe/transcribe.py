@@ -2,7 +2,7 @@ from faster_whisper import WhisperModel
 import pathlib
 import logging
 
-def ts(filename: pathlib.Path):
+def run(filename: pathlib.Path):
     model_size = "base"
 
     # Run on GPU with FP16
