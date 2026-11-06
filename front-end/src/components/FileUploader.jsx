@@ -9,9 +9,13 @@ export default function FileUploader() {
         setFile(null)
     }
     const handle_change = (e)=> {
-        setFile(uploadRef.current.files[0])
+        const curr_file = uploadRef.current.files[0]
+        if(check_file_type(curr_file))
+            setFile(curr_file)
+        else 
+            alert("Error: Invalid File")
     }
-
+    
     const handleDragOver = (e)=>{
         // because by default blocks for safety 
         e.preventDefault()
@@ -19,14 +23,22 @@ export default function FileUploader() {
 
     const handleDrop = (e)=>{
         e.preventDefault()
-        setFile(e.dataTransfer.files[0])
+        const curr_file = (e.dataTransfer.files[0])
+        if(check_file_type(curr_file))
+            setFile((e.dataTransfer.files[0]))
+        else 
+            alert("Error: Invalid File")
+
     }
 
+    const check_file_type = (curr_file) => {
+        return curr_file.type.startsWith('video') || curr_file.type.startsWith('audio')
+    }   
+    
     return (
-
         <div
             className='sm:w-full sm:mx-auto flex justify-center text-white 
-                    rounded-2xl outline-2 outline-dotted hover:opacity-70 overflow-hidden
+                    rounded-2xl outline-2 outline-white outline-dotted hover:opacity-70 overflow-hidden
                     cursor-pointer max-h-[45vh] h-full bg-slate-900'
 
             onClick={()=> uploadRef.current.click()}
@@ -44,7 +56,9 @@ export default function FileUploader() {
                 onChange={handle_change}
                 onClick={handle_click}
             />
-            <h2 className='place-content-center'>{file&&file.name || 'Drag and drop meeting here'}</h2>
+            <h2 
+            className='place-content-center'>{file&&file.name || 'Drag and drop meeting here'}
+            </h2>
         </div>
 
     )
