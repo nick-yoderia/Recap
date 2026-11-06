@@ -5,7 +5,6 @@ export default function Summary() {
     const location = useLocation();
     const meeting = location.state?.meeting
     const display = location.state?.display
-    console.log(display)
     return(
         <div className = 'p-3 lg:pt-5 font-sans text-[#FAF9F6]'> 
             <div className = 'w-full bg-slate-900 rounded-2xl p-5 xl:pt-5 xl:pb-5 border-white/20 border font-sans'>
