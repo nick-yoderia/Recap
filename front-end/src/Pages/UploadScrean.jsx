@@ -41,7 +41,7 @@ export default function UploadScreen () {
     return (
     <div className = 'md:grid  md:grid-cols-5 md:h-screen md:py-5 md:p-0 p-5 md:gap-15 font-sans'>
      
-     <div className = 'md:col-span-3 md:col-start-2 md:row-start-1 pt-10 text-center text-3xl md:text-5xl border-b rounded-2xl'>
+     <div className = 'md:col-span-3 md:col-start-2 md:row-start-1 pt-5 text-center text-3xl md:text-5xl border-b rounded-2xl'>
           Welcome to Recap! 
           <span className = 'md:text-2xl font-mono text-sm flex flex-col py-5 text-light text-teal-100 md:row-start-3 '>
             Generate new recaps or view past ones
