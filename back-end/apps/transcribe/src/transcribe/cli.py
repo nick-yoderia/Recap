@@ -1,22 +1,26 @@
-from faster_whisper import WhisperModel
+import typer
+import pathlib
+from transcribe import run
 
-def main():
-    model_size = "base"
+app = typer.Typer()
 
-    # Run on GPU with FP16
-    #model = WhisperModel(model_size, device="cuda", compute_type="float16")
-
-    # or run on GPU with INT8
-    # model = WhisperModel(model_size, device="cuda", compute_type="int8_float16")
-    # or run on CPU with INT8
-    model = WhisperModel(model_size, device="cpu", compute_type="int8")
-
-    segments, info = model.transcribe("audio.mp3", beam_size=5)
-
-    print("Detected language '%s' with probability %f" % (info.language, info.language_probability))
-
-    for segment in segments:
-        print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
+@app.command()
+def main(
+    video_path: pathlib.Path = typer.Argument(
+        ...,
+        exists=True,
+        file_okay=True,
+        dir_okay=True,
+        readable=True,
+        resolve_path=True,
+        )
+):
+    if video_path.suffix.lower() != ".mp3":
+        typer.echo(f"Error: File must be .mp3", err=True)
+        raise typer.Exit(code=1)
+    
+    typer.echo(f"Transcribing {video_path}", err=True)
+    print(run(video_path))
 
 if __name__ == "__main__":
-    main()
+    app()
