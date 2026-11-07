@@ -1,4 +1,5 @@
 import {useRef, useState} from "react" 
+import {uploadFile} from '../axios/uploadFile'
 
 export default function FileUploader() {
     const uploadRef = useRef(null)
@@ -9,11 +10,10 @@ export default function FileUploader() {
         setFile(null)
     }
     const handle_change = (e)=> {
-        const curr_file = uploadRef.current.files[0]
-        if(check_file_type(curr_file))
-            setFile(curr_file)
-        else 
-            alert("Error: Invalid File")
+        setFile(uploadRef.current.files[0])
+
+        handleUpload(uploadRef.current.files[0])
+       
     }
     
     const handleDragOver = (e)=>{
@@ -23,18 +23,23 @@ export default function FileUploader() {
 
     const handleDrop = (e)=>{
         e.preventDefault()
-        const curr_file = (e.dataTransfer.files[0])
-        if(check_file_type(curr_file))
-            setFile((e.dataTransfer.files[0]))
-        else 
-            alert("Error: Invalid File")
+        setFile(e.dataTransfer.files[0])
 
+        handleUpload(e.dataTransfer.files[0]);
     }
 
-    const check_file_type = (curr_file) => {
-        return curr_file.type.startsWith('video') || curr_file.type.startsWith('audio')
-    }   
-    
+    const handleUpload = async (selectedFile) => {
+        try {
+
+            console.log("uploading file ")
+            const result = await uploadFile(selectedFile);
+            console.log(result);
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <div
             className='sm:w-full sm:mx-auto flex justify-center text-white 
