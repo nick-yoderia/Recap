@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, UploadFile, File
 import transcribe
 import summarize
 
@@ -10,7 +10,8 @@ def create_transcript(file: UploadFile):
     return {"transcript": text}
 
 @app.post("/api/summary")
-def create_summary(file: UploadFile):
+async def create_summary(file: UploadFile = File(...)):
     text = transcribe.run(file.file)
+    print(text)
     summary = summarize.run(text)
     return {"summary": summary}

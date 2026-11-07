@@ -1,4 +1,5 @@
 import {useRef, useState} from "react" 
+import {uploadFile} from '../axios/uploadFile'
 
 export default function FileUploader() {
     const uploadRef = useRef(null)
@@ -10,6 +11,9 @@ export default function FileUploader() {
     }
     const handle_change = (e)=> {
         setFile(uploadRef.current.files[0])
+
+        handleUpload(uploadRef.current.files[0])
+       
     }
 
     const handleDragOver = (e)=>{
@@ -20,7 +24,21 @@ export default function FileUploader() {
     const handleDrop = (e)=>{
         e.preventDefault()
         setFile(e.dataTransfer.files[0])
+
+        handleUpload(e.dataTransfer.files[0]);
     }
+
+    const handleUpload = async (selectedFile) => {
+        try {
+
+            console.log("uploading file ")
+            const result = await uploadFile(selectedFile);
+            console.log(result);
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
 
