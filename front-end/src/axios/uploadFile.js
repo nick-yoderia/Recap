@@ -7,8 +7,8 @@ const uploadFile = async (file) => {
     formData.append('file', file);
 
     try {
-        const response = await axiosClient.post('server_api', formData);
-        console.log(response.data);
+        const response = await axiosClient.post('/api/summary', formData);
+        return response.data
 
     } catch (error) {
         console.error(error);
