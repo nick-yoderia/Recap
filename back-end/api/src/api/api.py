@@ -1,8 +1,14 @@
 from fastapi import FastAPI, UploadFile, File
+import convert
 import transcribe
 import summarize
 
 app = FastAPI()
+
+@app.post("/api/convert")
+def convert_media(file: UploadFile):
+    media = convert.run(file.file)
+    return {"convert": media}
 
 @app.post("/api/transcript")
 def create_transcript(file: UploadFile):

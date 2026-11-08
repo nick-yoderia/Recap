@@ -10,6 +10,7 @@ requires-python = ">=3.14"
 dependencies = [
     "fastapi[standard]>=0.162.0",
     "transcribe",
+    "python-magic",
 ]
 
 [tool.fastapi]
