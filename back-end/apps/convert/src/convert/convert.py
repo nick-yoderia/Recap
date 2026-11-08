@@ -14,7 +14,7 @@ def run (file_stream: BinaryIO) -> pathlib.Path:
     mime_type = magic.from_buffer(header_chunk, mime=True)
     
     # Validate MIME is video or audio
-    allowed_mimes = {"video/mp4", "video/quicktime", "video/x-matroska", "video/webm", "audio/mpeg", "audio/wav", "audio/x-m4a"}
+    allowed_mimes = {"audio/mpeg", "video/mp4", "audio/mp4", "audio/wav", "audio/x-wav", "audio/x-m4a", "video/webm", "audio/webm"}
     if mime_type not in allowed_mimes:
         raise ValueError(f"Invalid file type: {mime_type}. Valid audio and video formats only.")
     
