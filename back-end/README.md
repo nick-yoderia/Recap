@@ -1,27 +1,35 @@
-# Installation
 
-We are using OpenAI's Faster-Whisper locally for this project. There is a python package that can be installed.
+### Dependencies
 
- To run the cli test:
+1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
+2. [Install ollama](https://docs.ollama.com/quickstart)
 
+### Running
+
+If it is your first time running the `back-end` you will need to run:
 ```
-cd back-end
+cd /recap/back-end
 uv sync
-uv run back-end
+ollama serve
+ollama pull llama3.2:3b
 ```
 
+Once you have done this once you only have to run `uv sync` when new dependencies or new apps are added.
 
-### Running the summarize demo:
+Now, to run an app, in `/back-end` you run:
 ```
-cd back-end
-uv sync
-cp .env.example .env
-```
-Open `.env` and set OPENAI_API_KEY to your own key. Keys can be created on the [OpenAI Platform](https://platform.openai.com). This file is ignored by Git. Do not commit your key!
-
-Run the demo:
-```
-uv run --env-file .env python src/back_end/summarize.py
+uv run <APP_NAME> [args...]
 ```
 
-API usage does incur billing through the account provided. The demo runs independently of `cli.py` and does not interfere with the Whisper transcription demo.
+### Special cases
+
+`summarize` requires running the ollama local server
+```
+ollama serve
+```
+
+`api` has a unique uv command and requires ollama server for full functionality
+```
+ollama serve
+uv run fastapi dev
+```
