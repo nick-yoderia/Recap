@@ -55,15 +55,15 @@ name = "api"
 version = "0.1.0"
 source = { editable = "api" }
 dependencies = [
+    { name = "convert" },
     { name = "fastapi", extra = ["standard"] },
-    { name = "python-magic" },
     { name = "transcribe" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "convert", editable = "apps/convert" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.162.0" },
-    { name = "python-magic" },
     { name = "transcribe", editable = "apps/transcribe" },
 ]
 
@@ -218,6 +218,12 @@ wheels = [
 name = "convert"
 version = "0.1.0"
 source = { editable = "apps/convert" }
+dependencies = [
+    { name = "puremagic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "puremagic" }]
 
 [[package]]
 name = "ctranslate2"
@@ -1068,6 +1074,15 @@ wheels = [
 ]
 
 [[package]]
+name = "puremagic"
+version = "2.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/24/74/ce5987ab9b8aec4ced06e2723ebb604205c9eb58abdad91453da93166380/puremagic-2.2.0.tar.gz", hash = "sha256:eb4bddf07c177c4b434554b92165b67449f5a51e152b976202d6254498810eef", size = 1189752, upload-time = "2026-04-08T01:39:55.562Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/95/81/314320aeffd88dadeac553ff9eb10f54507ab41deccd0c69f6221d254a0a/puremagic-2.2.0-py3-none-any.whl", hash = "sha256:c4f7ed7307f056c787199acfda839555921be1df13abba61e8e6db0c787ae1d0", size = 71971, upload-time = "2026-04-08T01:39:54.169Z" },
+]
+
+[[package]]
 name = "pydantic"
 version = "2.14.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1203,15 +1218,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/74/26/2fbeedb218a787a5eea551c7532cac4e009f83d689dd2faa0d0353473f86/python_dotenv-1.2.4.tar.gz", hash = "sha256:f0d53e69935a851c0dcc78f3ab7aaccd8cabef0b92382b576b824212902873c0", size = 60824, upload-time = "2026-10-01T05:36:10Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/60/d1/38f3a3405989a89ac18390803e70c6ad7c7760da4f9b83cbeca0c44a0c72/python_dotenv-1.2.4-py3-none-any.whl", hash = "sha256:42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc", size = 23266, upload-time = "2026-10-01T05:36:08.633Z" },
-]
-
-[[package]]
-name = "python-magic"
-version = "0.4.27"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/da/db/0b3e28ac047452d079d375ec6798bf76a036a08182dbb39ed38116a49130/python-magic-0.4.27.tar.gz", hash = "sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b", size = 14677, upload-time = "2022-06-07T20:16:59.508Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/6c/73/9f872cb81fc5c3bb48f7227872c28975f998f3e7c2b1c16e95e6432bbb90/python_magic-0.4.27-py2.py3-none-any.whl", hash = "sha256:c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3", size = 13840, upload-time = "2022-06-07T20:16:57.763Z" },
 ]
 
 [[package]]

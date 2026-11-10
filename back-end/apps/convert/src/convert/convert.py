@@ -1,7 +1,7 @@
 import subprocess
 import pathlib 
 from pathlib import Path
-import magic
+import puremagic
 from typing import BinaryIO
 import tempfile
 import shutil
@@ -11,7 +11,7 @@ def run (file_stream: BinaryIO) -> pathlib.Path:
     header_chunk = file_stream.read(2048)
     file_stream.seek(0)
     
-    mime_type = magic.from_buffer(header_chunk, mime=True)
+    mime_type = puremagic.from_string(header_chunk, mime=True)
     
     # Validate MIME is video or audio
     allowed_mimes = {"audio/mpeg", "video/mp4", "audio/mp4", "audio/wav", "audio/x-wav", "audio/x-m4a", "video/webm", "audio/webm"}
