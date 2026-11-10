@@ -7,13 +7,12 @@ export const uploadFile = async (file) => {
     formData.append('file', file);
 
     try {
-        const response = await axiosClient.post('/api/transcript', formData);
+        const response = await axiosClient.post('/api/summary', formData);
         return response.data
 
     } catch (error) {
-        console.error(error);
+        console.error("Error fetching summary", error);
     }
 
     
-
 };

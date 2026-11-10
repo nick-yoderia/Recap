@@ -27,6 +27,5 @@ def create_transcript(file: UploadFile):
 @app.post("/api/summary")
 async def create_summary(file: UploadFile):
     text = transcribe.run(file.file)
-    print(text)
     summary = summarize.run(text)
-    return {"summary": summary}
+    return {"summary": summary, "transcript": text}

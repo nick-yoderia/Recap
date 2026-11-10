@@ -2,8 +2,30 @@ import FileUploader from "../components/FileUploader"
 import AnimatedButton from "../components/AnimatedButton"
 import RecapDisplayBox from "../components/RecapDisplayBox"
 import {Link} from 'react-router-dom'
+import {uploadFile} from '../axios/uploadFile'
+import {useRef, useState} from "react" 
 
 export default function UploadScreen () {
+  const [file, setFile] = useState(null)
+
+  const handleUpload = async () => {
+    try {
+
+        if (!file) {
+          console.log("No file uploaded")
+          return;
+        }
+
+        console.log("uploading file")
+        const result = await uploadFile(file);
+        console.log(result.summary);
+        console.log(result.transcript);
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
   const meeting_sample = {
     title: "Kung Fu Panda", 
     summary: "Kung Fu Panda (2008) is about a clumsy, food-loving panda named Po who dreams of becoming a kung fu master. Po unexpectedly gets chosen as the Dragon Warrior, the greatest kung fu fighter destined to protect the Valley of Peace. However, nobody believes he is worthy of the title, including the Furious Five and their teacher, Master Shifu. At first, Po struggles with training because he is overweight, uncoordinated, and inexperienced. But Shifu eventually discovers that Po learns best when motivated by food. With hard work and determination, Po becomes a skilled fighter. Meanwhile, an evil snow leopard named Tai Lung escapes prison and returns to challenge the kung fu masters and claim the Dragon Scrole.  In the final battle, Po faces Tai Lung and discovers that the Dragon Scroll has no secret power. Instead, its message is that believing in yourself is what makes you special. Po defeats Tai Lung and saves the Valley of Peace.Main message: You don't have to be perfect or fit someone else's expectations to achieve greatness. Believe in yourself, work hard, and embrace who you are. 🐼 ", 
@@ -49,9 +71,9 @@ export default function UploadScreen () {
       </div>
 
       <div className = 'md:col-span-3 md:col-start-1  md:row-start-3 md:row-span-10 sm:max-h-[calc(100dvh-450px)] pl-2'>
-          <FileUploader />
+          <FileUploader fileSelect={setFile} />
           <div className = 'flex justify-center text-sm pt-10 place-content-center'>
-              <AnimatedButton>Generate recap!</AnimatedButton>
+              <AnimatedButton onClick={handleUpload}>Generate recap!</AnimatedButton>
           </div>
       </div>
 
