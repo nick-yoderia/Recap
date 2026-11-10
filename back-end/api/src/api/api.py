@@ -1,5 +1,7 @@
 from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, UploadFile, File
+import convert
 import transcribe
 import summarize
 
@@ -18,6 +20,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.post("/api/convert")
+def convert_media(file: UploadFile):
+    media = convert.run(file.file)
+    return {"convert": media}
 
 @app.post("/api/transcript")
 def create_transcript(file: UploadFile):
