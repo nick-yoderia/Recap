@@ -11,9 +11,8 @@ export const uploadFile = async (file) => {
         return response.data
 
     } catch (error) {
-        console.error(error);
+        console.error("Error fetching summary", error);
     }
 
     
-
 };
