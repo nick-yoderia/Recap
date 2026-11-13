@@ -1,8 +1,8 @@
 from faster_whisper import WhisperModel
-import pathlib
+from typing import BinaryIO
 import logging
 
-def run(filename: pathlib.Path):
+def run(file: BinaryIO):
     model_size = "base"
 
     # Run on GPU with FP16
@@ -13,7 +13,7 @@ def run(filename: pathlib.Path):
     # or run on CPU with INT8
     model = WhisperModel(model_size, device="cpu", compute_type="int8")
 
-    segments, info = model.transcribe(filename, beam_size=5)
+    segments, info = model.transcribe(file, beam_size=5)
 
     logging.info("Detected language '%s' with probability %f" % (info.language, info.language_probability))
 
