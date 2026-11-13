@@ -2,6 +2,7 @@
 members = [
     "apps/*",
     "api",
+    "db",
 ]
 
 [tool.fastapi]
