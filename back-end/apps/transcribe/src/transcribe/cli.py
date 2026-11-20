@@ -1,12 +1,12 @@
 import typer
-import pathlib
 from transcribe import run
+from typing import BinaryIO
 
 app = typer.Typer()
 
 @app.command()
 def main(
-    audio_path: pathlib.Path = typer.Argument(
+    audio_path: BinaryIO = typer.Argument(
         ...,
         exists=True,
         file_okay=True,

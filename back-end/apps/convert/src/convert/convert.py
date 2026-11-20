@@ -1,12 +1,9 @@
 import subprocess
-import pathlib 
-from pathlib import Path
 import puremagic
 from typing import BinaryIO
-import tempfile
-import shutil
+import io
 
-def run (file_stream: BinaryIO) -> pathlib.Path:
+def run (file_stream: BinaryIO) -> BinaryIO:
     # Read chunk of stream to check MIME type
     header_chunk = file_stream.read(2048)
     file_stream.seek(0)
@@ -19,27 +16,26 @@ def run (file_stream: BinaryIO) -> pathlib.Path:
         raise ValueError(f"Invalid file type: {mime_type}. Valid audio and video formats only.")
     
     # Save BinaryIO stream so ffmpeg can process it 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".tmp") as temp_in:
-        shutil.copyfileobj(file_stream, temp_in)
-        temp_in_path = pathlib.Path(temp_in.name)
-        
-    try:
-        outputPath = temp_in_path.with_name("converted.mp3")
-        ffmpegCommands = [
-            "ffmpeg",
-            "-y", # Overwrite output file 
-            "-i", str(temp_in_path),
-            "-vn", # No Video
-            "-c:a", "libmp3lame", # Use Lame encoding library for MP3
-            "-q:a", "2", # Variable bitrate
-            str(outputPath) # Output file
-        ]
-        
-        result = subprocess.run(ffmpegCommands, capture_output=True, text=True)
-        if result.returncode != 0:
-            raise RuntimeError(f"FFMpeg conversion failed: {result.stderr}")
-        return outputPath
-    finally:
-        # CLean temp file 
-        if temp_in_path.exists():
-            temp_in_path.unlink()
+    file_stream.seek(0)
+
+    command = ["ffmpeg", "-y", 
+                   "-i", "pipe:0",
+                   "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", # normalize volume levels
+                   "-ar", "16000", # standarize to 16 kHz audio (standard for models)
+                   "-ac", "1", # make audio mono
+                   "-f", "wav", # convert to wav
+                   "pipe:1"
+                    ]
+
+    result = subprocess.run(
+        command,
+        input=file_stream.read(),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=True
+    )
+    
+    output_io = io.BytesIO(result.stdout)
+    output_io.seek(0)
+    output_io.name = "audio.wav"
+    return output_io
