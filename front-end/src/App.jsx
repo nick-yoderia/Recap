@@ -9,7 +9,7 @@ function App() {
   return (
       <div className ='lg:h-screen w-screen flex flex-col lg:overflow-hidden text-white bg-linear-to-t from-slate-900 to-slate-950'>
           <RecapHeader/> 
-        <div className = 'flex-1 min-h-0 w-full max-w-360 mx-auto'>
+        <div className = 'flex-1 min-h-0 w-full'>
           <Routes>
             <Route path="/" element={<UploadScreen/>} ></Route>
             <Route path="/Summary" element={<Summary/>}></Route>
