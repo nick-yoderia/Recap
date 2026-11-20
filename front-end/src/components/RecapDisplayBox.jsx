@@ -1,8 +1,25 @@
 
 export default function RecapDisplayBox ({ meetings }){
+
+    
+    if (meetings.length ===  0 || !meetings){
+
+           return (<div className="text-white bg-slate-900 border-[0.25px] border-white/20
+                    hover:opacity-85 p-5 flex flex-col">
+
+                    <div className="flex flex-row">
+                            No recaps yet... 
+                    </div>
+                
+                </div>
+           )
+    }
+       
+   
     return (
+        
         <>
-            {meetings.map((meeting) => (
+            {mettings().map((meeting) => (
 
                 <div key={meeting.key} className="text-white bg-slate-900 border-[0.25px] border-white/20
                 hover:opacity-85 p-5 flex flex-col "
