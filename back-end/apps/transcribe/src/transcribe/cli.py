@@ -19,9 +19,10 @@ def main(
         typer.echo(f"Error: File must be .mp3", err=True)
         raise typer.Exit(code=1)
     
-    typer.echo(f"Transcribing {audio_path}", err=True)
+    typer.echo(f"Transcribing {audio_path}")
+    typer.echo(f"Processing...")
     with open(audio_path, "rb") as f:
-        print(run(f))
+        run(f)
 
 if __name__ == "__main__":
     app()
