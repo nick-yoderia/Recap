@@ -2,6 +2,7 @@ import typer
 import pathlib
 import shutil
 from convert import run
+import sys
 
 app = typer.Typer()
 
@@ -21,12 +22,11 @@ def main(
     try:
         # Open the file path as a binary stream and pass it to convert.run()
         with open(input_path, "rb") as file_stream:
-            temp_output_path = run(file_stream)
+            audio_stream = run(file_stream)
+            shutil.copyfileobj(audio_stream, sys.stdout.buffer)
+            sys.stdout.buffer.flush()
+
             
-        final_output_path = input_path.with_name("converted.mp3")
-        shutil.move(temp_output_path, final_output_path)
-                
-        typer.echo(f"Success! Converted file saved to: {final_output_path}")
     except Exception as e:
         typer.echo(f"Error during conversion: {e}", err=True)
         raise typer.Exit(code=1)

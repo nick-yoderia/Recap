@@ -1,12 +1,12 @@
 import typer
-import pathlib
 from transcribe import run
+from typing import BinaryIO
 
 app = typer.Typer()
 
 @app.command()
 def main(
-    audio_path: pathlib.Path = typer.Argument(
+    audio_path: BinaryIO = typer.Argument(
         ...,
         exists=True,
         file_okay=True,
@@ -19,9 +19,10 @@ def main(
         typer.echo(f"Error: File must be .mp3", err=True)
         raise typer.Exit(code=1)
     
-    typer.echo(f"Transcribing {audio_path}", err=True)
+    typer.echo(f"Transcribing {audio_path}")
+    typer.echo(f"Processing...")
     with open(audio_path, "rb") as f:
-        print(run(f))
+        run(f)
 
 if __name__ == "__main__":
     app()
