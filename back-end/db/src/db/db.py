@@ -18,7 +18,7 @@ def init():
         cursor.execute("""--sql
             create table if not exists owner(
                 id integer primary key,
-                token_hash text,
+                token_hash text unique not null,
                 created_at datetime not null default current_timestamp
             )""")
 
@@ -27,12 +27,12 @@ def init():
                 id integer primary key,
                 owner_id int references owner(id),
                 -- series_id int references series(id)
-                title text,
-                source_filename text,
-                duration_seconds int,
+                -- title text,
+                -- source_filename text,
+                -- duration_seconds int,
                 status text,
-                keep_media boolean,
-                media_deleted_at datetime,
+                -- keep_media boolean,
+                -- media_deleted_at datetime,
                 created_at datetime not null default current_timestamp
             )""")
 
@@ -42,8 +42,7 @@ def init():
                 meeting_id int unique not null references meeting(id) on delete cascade,
                 language text, 
                 whisper_model text,
-                full_text text not null,
-                created_at datetime not null default current_timestamp
+                full_text text not null
             )""")
 
         cursor.execute("""--sql
@@ -53,10 +52,7 @@ def init():
                 version int not null,
                 is_current int not null,
                 llm_model text,
-                prompt_version text,
                 overview text,
-                payload_json text not null,
-                created_at datetime not null default current_timestamp,
                 unique (meeting_id, version)
             )""")
 
@@ -72,7 +68,7 @@ def init():
         conn.close()
 
 
-def create_meeting(conn, owner_id, filename, title):
+def create_meeting(conn, owner_id):
     cursor = conn.cursor()
 
     cursor.execute(
@@ -83,9 +79,9 @@ def create_meeting(conn, owner_id, filename, title):
     if owner is None: raise ValueError(f"Owner {owner_id} does not exist")      # raise ValueError if owner_id does not exist instead of handling
 
     cursor.execute("""--sql
-        insert into meeting (owner_id, source_filename, title, status, keep_media)
-        values (?, ?, ?, 'uploaded', 0)
-    """, (owner_id, filename, title))
+        insert into meeting (owner_id, status)
+        values (?, 'uploaded')
+    """, (owner_id,))
 
     return cursor.lastrowid     # return new meeting_id on success
 
@@ -108,7 +104,7 @@ def save_transcript(conn, meeting_id, full_text, language=None, whisper_model="b
     return cursor.lastrowid
 
 
-def save_summary(conn, meeting_id, overview, payload_json, llm_model=None, prompt_version=None):
+def save_summary(conn, meeting_id, overview, llm_model=None):
     cursor = conn.cursor()
 
     cursor.execute(
@@ -130,9 +126,9 @@ def save_summary(conn, meeting_id, overview, payload_json, llm_model=None, promp
         cursor.execute("update summaries set is_current = 0 where meeting_id = ? AND is_current = 1", (meeting_id,))
 
     cursor.execute("""--sql
-            insert into summaries (meeting_id, version, is_current, llm_model, prompt_version, overview, payload_json)
-            values (?, ?, 1, ?, ?, ?, ?)
-        """, (meeting_id, version, llm_model, prompt_version, overview, payload_json))
+            insert into summaries (meeting_id, version, is_current, llm_model, overview)
+            values (?, ?, 1, ?, ?)
+        """, (meeting_id, version, llm_model, overview))
 
     return cursor.lastrowid
 
@@ -141,7 +137,7 @@ def list_meeting(conn, owner_id):
     cursor = conn.cursor()
 
     cursor.execute("""--sql
-        select id, title, status, created_at
+        select id, status, created_at
         from meeting
         where owner_id = ?
         order by created_at desc, id desc
@@ -154,7 +150,7 @@ def get_meeting(conn, meeting_id, owner_id):
     cursor = conn.cursor()
 
     cursor.execute("""--sql
-    select id, title, status, created_at
+    select id, status, created_at
     from meeting
     where id = ? AND owner_id = ?
     """, (meeting_id, owner_id))
@@ -187,3 +183,14 @@ def create_owner(conn, token_hash):
     """, (token_hash,))
 
     return cursor.lastrowid
+
+
+# set a meeting's status (e.g. 'processing', 'complete', 'failed')
+def update_meeting_status(conn, meeting_id, status):
+    cursor = conn.cursor()
+
+    cursor.execute("""--sql
+        update meeting
+        set status = ?
+        where id = ?
+    """, (status, meeting_id))
