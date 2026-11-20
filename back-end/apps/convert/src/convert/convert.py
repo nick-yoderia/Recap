@@ -8,8 +8,11 @@ def run (file_stream: BinaryIO) -> BinaryIO:
     header_chunk = file_stream.read(2048)
     file_stream.seek(0)
     
-    mime_type = puremagic.from_string(header_chunk, mime=True)
-    
+    try:
+        mime_type = puremagic.from_string(header_chunk, mime=True)
+    except puremagic.PureError:
+        raise ValueError("Could not identify file type. Valid audio and video formats only.")
+
     # Validate MIME is video or audio
     allowed_mimes = {"audio/mpeg", "video/mp4", "audio/mp4", "audio/wav", "audio/x-wav", "audio/x-m4a", "video/webm", "audio/webm"}
     if mime_type not in allowed_mimes:

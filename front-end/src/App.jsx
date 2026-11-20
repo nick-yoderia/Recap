@@ -3,8 +3,14 @@ import UploadScreen from './Pages/UploadScrean'
 import {Route, Routes} from 'react-router-dom'
 import Summary from './Pages/Summary'
 import RecapHeader from './components/RecapHeader'
+import { useEffect } from 'react'
+import { getOwner } from './axios/getOwner'
 
 function App() {
+
+  useEffect(() => {
+    getOwner();
+  }, []);
 
   return (
       <div className ='lg:h-screen w-screen flex flex-col lg:overflow-hidden text-white bg-linear-to-t from-slate-900 to-slate-950'>

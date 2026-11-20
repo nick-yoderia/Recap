@@ -57,6 +57,7 @@ version = "0.1.0"
 source = { editable = "api" }
 dependencies = [
     { name = "convert" },
+    { name = "db" },
     { name = "fastapi", extra = ["standard"] },
     { name = "transcribe" },
 ]
@@ -64,6 +65,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "convert", editable = "apps/convert" },
+    { name = "db", editable = "db" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.162.0" },
     { name = "transcribe", editable = "apps/transcribe" },
 ]
